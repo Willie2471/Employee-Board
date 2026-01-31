@@ -21,7 +21,7 @@
         .container {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            grid-template-rows: auto 1fr auto;
+            grid-template-rows: auto 1fr;
             gap: 20px;
             padding: 20px;
             min-height: 100vh;
@@ -243,10 +243,32 @@
         }
 
         .news-card {
-            height: 400px;
+            height: 300px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+        }
+
+        .radar-card {
+            height: 300px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radar-container {
+            flex: 1;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .radar-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
         }
 
         .news-list {
@@ -282,15 +304,15 @@
         }
 
         .inspiration-card {
-            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-            color: #6a1b9a;
-            border: 2px solid #ce93d8;
+            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
+            color: #5d4e37;
+            border: 2px solid #c4a777;
             text-align: center;
         }
 
         .inspiration-card .card-title {
-            color: #6a1b9a;
-            border-bottom-color: #6a1b9a;
+            color: #5d4e37;
+            border-bottom-color: #5d4e37;
         }
 
         .verse {
@@ -299,9 +321,9 @@
             line-height: 1.6;
             margin: 15px 0;
             padding: 15px;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.6);
             border-radius: 10px;
-            border: 1px solid rgba(106,27,154,0.3);
+            border: 1px solid rgba(93,78,55,0.3);
         }
 
         .verse-reference {
@@ -318,68 +340,39 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             padding: 10px;
-            background: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.5);
             border-radius: 10px;
-            border: 2px solid rgba(106,27,154,0.4);
+            border: 2px solid rgba(93,78,55,0.4);
         }
 
-        .footer {
-            grid-column: 1 / -1;
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        .showcase-title {
-            font-weight: bold;
-            color: #2d5016;
-            font-size: 1.3em;
-            margin-bottom: 15px;
+        .showcase-card {
+            height: 300px;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
         }
 
-        .audio-toggle {
-            background: #3d6b1f;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
+        .showcase-card .card-title {
+            font-size: 1em;
+            margin-bottom: 10px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
         }
 
-        .audio-toggle:hover {
-            background: #2d5016;
-            transform: translateY(-2px);
-        }
-
-        .audio-toggle.muted {
-            background: #999;
-        }
-
-        .video-container {
+        .showcase-card .video-container {
             position: relative;
             width: 100%;
-            max-width: 1200px; /* Wider - was 800px */
-            margin: 0 auto;
-            padding-bottom: 45%; /* Taller video area */
+            max-width: 100%;
+            margin: 0;
+            padding-bottom: 75%;
             height: 0;
             overflow: hidden;
             border-radius: 10px;
             background: #000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .video-container iframe {
+        .showcase-card .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -387,6 +380,28 @@
             height: 100%;
             border: none;
             border-radius: 10px;
+        }
+
+        .audio-toggle-small {
+            background: #3d6b1f;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .audio-toggle-small:hover {
+            background: #2d5016;
+        }
+
+        .audio-toggle-small.muted {
+            background: #999;
         }
 
         .loading {
@@ -495,23 +510,31 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="footer">
-            <div class="showcase-title">
-                🏆 Completed Jobs Showcase
-                <button class="audio-toggle muted" id="audioToggle" onclick="toggleAudio()">
-                    <span id="audioIcon">🔇</span>
-                    <span id="audioText">Audio Off</span>
-                </button>
-            </div>
-            <div class="video-container" id="videoContainer">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <div>Loading video...</div>
+            <div class="card radar-card">
+                <div class="card-title">🌧️ Rain Radar</div>
+                <div class="radar-container" id="radarContainer">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div>Loading radar...</div>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="card showcase-card">
+                <div class="card-title">
+                    🏆 Completed Jobs
+                    <button class="audio-toggle-small muted" id="audioToggle" onclick="toggleAudio()">
+                        <span id="audioIcon">🔇</span>
+                    </button>
+                </div>
+                <div class="video-container" id="videoContainer">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div>Loading...</div>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <script>
@@ -814,6 +837,19 @@
             }
         }
 
+        // Rain Radar
+        function loadRadar() {
+            const radarContainer = document.getElementById('radarContainer');
+            // Using Windy.com embed for Titusville, FL area
+            radarContainer.innerHTML = `
+                <iframe
+                    src="https://embed.windy.com/embed2.html?lat=28.612&lon=-80.808&detailLat=28.612&detailLon=-80.808&width=650&height=450&zoom=8&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+            `;
+        }
+
         // YouTube Video Player
         let isMuted = true; // Start muted by default
         
@@ -898,6 +934,7 @@
             }, msUntilMidnight);
             
             loadNews();
+            loadRadar();
             loadVideo();
         }
 
