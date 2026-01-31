@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive Photo Link Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d5016;
+            border-bottom: 3px solid #3d6b1f;
+            padding-bottom: 10px;
+        }
+        .instruction {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #3d6b1f;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        button {
+            background: #3d6b1f;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #2d5016;
+        }
+        .output {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 2px solid #ddd;
+            font-family: monospace;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #3d6b1f;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Google Drive Photo Link Converter</h1>
+        
+        <div class="instruction">
+            <strong>Quick Setup Tool for WS Lawn Care Employee Board</strong><br>
+            This tool converts Google Drive sharing links into direct image URLs for your team photos.
+        </div>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Get Photo Links from Google Drive:</strong>
+            <ul>
+                <li>Open your Team Photos folder: <a href="https://drive.google.com/drive/folders/1SPQ9DwEa7qwxkK6CrOOGcjFM7d1Er-KE" target="_blank">Open Folder</a></li>
+                <li>For each photo, right-click → Share → "Anyone with the link"</li>
+                <li>Copy the sharing link</li>
+                <li>Paste ALL links below (one per line)</li>
+            </ul>
+        </div>
+
+        <textarea id="inputLinks" rows="10" placeholder="Paste your Google Drive sharing links here, one per line...
+
+Example:
+https://drive.google.com/file/d/1ABC123xyz/view?usp=sharing
+https://drive.google.com/file/d/2DEF456abc/view?usp=sharing"></textarea>
+
+        <button onclick="convertLinks()">🔄 Convert Links</button>
+        <button onclick="copyOutput()">📋 Copy Result</button>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Use the converted links:</strong> The output below will give you ready-to-use code. Copy it and replace the <code>loadTeamPhotos()</code> function in your employee-board.html file.
+        </div>
+
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function convertLinks() {
+            const input = document.getElementById('inputLinks').value;
+            const lines = input.split('\n').filter(line => line.trim());
+            
+            if (lines.length === 0) {
+                alert('Please paste some Google Drive links first!');
+                return;
+            }
+
+            const photoUrls = [];
+            
+            lines.forEach(line => {
+                line = line.trim();
+                
+                // Extract file ID from various Google Drive URL formats
+                let fileId = null;
+                
+                // Format: https://drive.google.com/file/d/FILE_ID/view
+                const match1 = line.match(/\/file\/d\/([^\/]+)/);
+                if (match1) {
+                    fileId = match1[1];
+                }
+                
+                // Format: https://drive.google.com/open?id=FILE_ID
+                const match2 = line.match(/[?&]id=([^&]+)/);
+                if (match2) {
+                    fileId = match2[1];
+                }
+                
+                if (fileId) {
+                    // Remove any query parameters from file ID
+                    fileId = fileId.split('?')[0];
+                    const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                    photoUrls.push(directUrl);
+                }
+            });
+
+            if (photoUrls.length === 0) {
+                alert('No valid Google Drive links found. Make sure they are in the format:\nhttps://drive.google.com/file/d/FILE_ID/view');
+                return;
+            }
+
+            // Generate the code
+            const code = `async function loadTeamPhotos() {
+    try {
+        // Team member photos from Google Drive
+        const teamPhotos = [
+${photoUrls.map(url => `            '${url}'`).join(',\n')}
+        ];
+        
+        let html = '';
+        teamPhotos.forEach(photoUrl => {
+            html += \`<img src="\${photoUrl}" class="team-photo" alt="Team Member" onerror="this.style.display='none'" />\`;
+        });
+        
+        document.getElementById('teamPhotos').innerHTML = html || '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
+        
+    } catch (error) {
+        console.error('Team photos error:', error);
+        document.getElementById('teamPhotos').innerHTML = '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
+    }
+}`;
+
+            const output = document.getElementById('output');
+            output.textContent = code;
+            output.style.display = 'block';
+            
+            // Show success message
+            const summary = `✅ Successfully converted ${photoUrls.length} photo link(s)!\n\n`;
+            output.textContent = summary + code;
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            if (output.style.display === 'none') {
+                alert('Please convert links first!');
+                return;
+            }
+            
+            // Get just the code part (skip the success message)
+            const text = output.textContent;
+            const codeStart = text.indexOf('async function');
+            const codeToCopy = text.substring(codeStart);
+            
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                alert('✅ Code copied to clipboard!\n\nNow:\n1. Open employee-board.html\n2. Find the loadTeamPhotos() function\n3. Replace it with the copied code\n4. Save and upload to GitHub');
+            }).catch(err => {
+                alert('Could not copy automatically. Please select and copy manually.');
+                console.error('Copy failed:', err);
+            });
+        }
+    </script>
+</body>
+</html>
