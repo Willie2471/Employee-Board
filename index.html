@@ -326,78 +326,36 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            overflow: hidden;
         }
 
-        .carousel-container {
+        .showcase-title {
+            font-weight: bold;
+            color: #2d5016;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .video-container {
             position: relative;
             width: 100%;
-            height: 200px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
             overflow: hidden;
             border-radius: 10px;
-            background: #f5f5f5;
+            background: #000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .carousel-slide {
-            display: none;
-            width: 100%;
-            height: 100%;
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .carousel-slide.active {
-            display: block;
-        }
-
-        .carousel-slide img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            border: none;
             border-radius: 10px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .carousel-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .carousel-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ddd;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .carousel-dot.active {
-            background: #3d6b1f;
-            width: 30px;
-            border-radius: 6px;
-        }
-
-        .carousel-controls {
-            display: none; /* Hidden for auto-rotate only display */
-        }
-
-        .carousel-btn {
-            display: none;
         }
 
         .loading {
@@ -509,16 +467,13 @@
         </div>
 
         <div class="footer">
-            <div style="font-weight: bold; color: #2d5016; margin-bottom: 10px; font-size: 1.2em;">
-                📸 Team Showcase
-            </div>
-            <div class="carousel-container" id="carouselContainer">
+            <div class="showcase-title">🏆 Completed Jobs Showcase</div>
+            <div class="video-container" id="videoContainer">
                 <div class="loading">
                     <div class="loading-spinner"></div>
-                    <div>Loading images...</div>
+                    <div>Loading video...</div>
                 </div>
             </div>
-            <div class="carousel-indicators" id="carouselIndicators"></div>
         </div>
     </div>
 
@@ -822,114 +777,58 @@
             }
         }
 
-        // Image Carousel from Google Drive
-        let currentSlide = 0;
-        let carouselImages = [];
-        let carouselInterval = null;
-
-        async function loadCarousel() {
-            try {
-                // INSTRUCTIONS TO ADD YOUR GOOGLE DRIVE IMAGES:
-                // 
-                // 1. Open your Team Photos folder: https://drive.google.com/drive/folders/1SPQ9DwEa7qwxkK6CrOOGcjFM7d1Er-KE
-                // 2. For EACH image file:
-                //    - Right-click → "Get link" or "Share"
-                //    - Set to "Anyone with the link can view"
-                //    - Copy the link
-                // 3. Convert each link from this format:
-                //    https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing
-                //    To this format:
-                //    https://drive.google.com/uc?export=view&id=FILE_ID_HERE
-                // 4. Add all converted URLs to the array below
-                
-                carouselImages = [
-                    // REPLACE THESE SAMPLE IMAGES WITH YOUR GOOGLE DRIVE IMAGE URLS
-                    // Example format:
-                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_1',
-                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_2',
-                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_3',
-                    
-                    // Sample lawn care images (remove these when you add your own):
-                    'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=800&q=80',
-                    'https://images.unsplash.com/photo-1592479367552-fdc156ce4d03?w=800&q=80',
-                    'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
-                    'https://images.unsplash.com/photo-1587502537147-2ba64a117a8c?w=800&q=80',
-                    'https://images.unsplash.com/photo-1595855759920-86582396756e?w=800&q=80'
-                ];
-                
-                const container = document.getElementById('carouselContainer');
-                const indicators = document.getElementById('carouselIndicators');
-                
-                // Build carousel HTML (no manual controls for display screen)
-                let slidesHTML = '';
-                
-                carouselImages.forEach((url, index) => {
-                    slidesHTML += `
-                        <div class="carousel-slide ${index === 0 ? 'active' : ''}" id="slide-${index}">
-                            <img src="${url}" alt="Team Image ${index + 1}" onerror="this.parentElement.style.display='none'">
+        // YouTube Video Player
+        function loadVideo() {
+            // INSTRUCTIONS TO ADD YOUR YOUTUBE VIDEO:
+            // 
+            // 1. Create your video:
+            //    - Use Google Photos to create a slideshow video, OR
+            //    - Use any video editor to combine job photos/videos
+            //    - Add your company logo, music, text overlays
+            //
+            // 2. Upload to YouTube:
+            //    - Go to youtube.com and upload
+            //    - You can make it "Unlisted" (not public but accessible via link)
+            //    - Copy the video ID from the URL
+            //    Example: https://www.youtube.com/watch?v=VIDEO_ID_HERE
+            //
+            // 3. Paste your video ID below:
+            
+            const youtubeVideoId = '1UUIXmNi2V0'; // WS Lawn Care completed jobs video
+            
+            // If you have a video ID, it will auto-play and loop
+            if (youtubeVideoId && youtubeVideoId !== 'dQw4w9WgXcQ') {
+                const videoContainer = document.getElementById('videoContainer');
+                videoContainer.innerHTML = `
+                    <iframe 
+                        src="https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&showinfo=0&rel=0&modestbranding=1"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen>
+                    </iframe>
+                `;
+            } else {
+                // Placeholder until you add your video
+                const videoContainer = document.getElementById('videoContainer');
+                videoContainer.innerHTML = `
+                    <div style="
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;
+                        background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+                        color: white;
+                        padding: 20px;
+                        text-align: center;
+                    ">
+                        <div style="font-size: 3em; margin-bottom: 10px;">🎬</div>
+                        <div style="font-size: 1.2em; font-weight: bold;">Your Project Video Will Appear Here</div>
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">
+                            Add your YouTube video ID to the code
                         </div>
-                    `;
-                });
-                
-                container.innerHTML = slidesHTML;
-                
-                // Build indicators
-                let indicatorsHTML = '';
-                carouselImages.forEach((_, index) => {
-                    indicatorsHTML += `<div class="carousel-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`;
-                });
-                indicators.innerHTML = indicatorsHTML;
-                
-                // Start auto-rotation (every 5 seconds)
-                startCarousel();
-                
-            } catch (error) {
-                console.error('Carousel error:', error);
-                document.getElementById('carouselContainer').innerHTML = '<div class="loading">⚠️ Images temporarily unavailable</div>';
+                    </div>
+                `;
             }
-        }
-
-        function showSlide(index) {
-            // Wrap around
-            if (index >= carouselImages.length) currentSlide = 0;
-            else if (index < 0) currentSlide = carouselImages.length - 1;
-            else currentSlide = index;
-            
-            // Update slides
-            document.querySelectorAll('.carousel-slide').forEach((slide, i) => {
-                slide.classList.toggle('active', i === currentSlide);
-            });
-            
-            // Update indicators
-            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSlide);
-            });
-        }
-
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-            resetCarouselTimer();
-        }
-
-        function previousSlide() {
-            showSlide(currentSlide - 1);
-            resetCarouselTimer();
-        }
-
-        function goToSlide(index) {
-            showSlide(index);
-            resetCarouselTimer();
-        }
-
-        function startCarousel() {
-            if (carouselInterval) clearInterval(carouselInterval);
-            carouselInterval = setInterval(() => {
-                nextSlide();
-            }, 5000); // Change slide every 5 seconds
-        }
-
-        function resetCarouselTimer() {
-            startCarousel(); // Restart the timer when user manually changes slides
         }
 
         // Initialize everything
@@ -954,7 +853,7 @@
             }, msUntilMidnight);
             
             loadNews();
-            loadCarousel();
+            loadVideo();
         }
 
         // Start when page loads
