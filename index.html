@@ -13,34 +13,46 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #f0f4f8;
             color: #333;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .container {
             display: grid;
             grid-template-columns: 2fr 1fr;
             grid-template-rows: auto 1fr auto;
-            gap: 15px;
-            padding: 15px;
-            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .header {
             grid-column: 1 / -1;
             background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
             color: white;
-            padding: 20px;
+            padding: 20px 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .company-branding {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .company-logo {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
         .company-name {
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
@@ -50,14 +62,14 @@
         }
 
         .time {
-            font-size: 3em;
+            font-size: 2.8em;
             font-weight: bold;
             font-family: 'Arial', sans-serif;
         }
 
         .date {
-            font-size: 1.2em;
-            opacity: 0.9;
+            font-size: 1.1em;
+            opacity: 0.95;
         }
 
         .main-content {
@@ -89,13 +101,14 @@
         }
 
         .weather-card {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+            border: 2px solid #90caf9;
         }
 
         .weather-card .card-title {
-            color: white;
-            border-bottom-color: white;
+            color: #1565c0;
+            border-bottom-color: #1565c0;
         }
 
         .weather-grid {
@@ -122,21 +135,24 @@
         }
 
         .weather-detail {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.7);
             padding: 10px;
             border-radius: 10px;
             text-align: center;
+            border: 1px solid rgba(21,101,192,0.3);
         }
 
         .weather-detail-label {
             font-size: 0.9em;
-            opacity: 0.9;
+            opacity: 0.8;
+            font-weight: 600;
         }
 
         .weather-detail-value {
             font-size: 1.5em;
             font-weight: bold;
             margin-top: 5px;
+            color: #0d47a1;
         }
 
         .mowing-alert {
@@ -262,14 +278,15 @@
         }
 
         .inspiration-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            color: #6a1b9a;
+            border: 2px solid #ce93d8;
             text-align: center;
         }
 
         .inspiration-card .card-title {
-            color: white;
-            border-bottom-color: white;
+            color: #6a1b9a;
+            border-bottom-color: #6a1b9a;
         }
 
         .verse {
@@ -278,8 +295,9 @@
             line-height: 1.6;
             margin: 15px 0;
             padding: 15px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.5);
             border-radius: 10px;
+            border: 1px solid rgba(106,27,154,0.3);
         }
 
         .verse-reference {
@@ -296,8 +314,9 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             padding: 10px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.4);
             border-radius: 10px;
+            border: 2px solid rgba(106,27,154,0.4);
         }
 
         .footer {
@@ -374,35 +393,11 @@
         }
 
         .carousel-controls {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 10px;
-            transform: translateY(-50%);
-            pointer-events: none;
+            display: none; /* Hidden for auto-rotate only display */
         }
 
         .carousel-btn {
-            background: rgba(61, 107, 31, 0.8);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: all;
-            transition: all 0.3s;
-        }
-
-        .carousel-btn:hover {
-            background: rgba(45, 80, 22, 0.9);
-            transform: scale(1.1);
+            display: none;
         }
 
         .loading {
@@ -462,7 +457,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="company-name">🌱 WS Lawn Care Services</div>
+            <div class="company-branding">
+                <img src="company-logo.png" alt="WS Lawn Care Services" class="company-logo">
+                <div class="company-name">WS Lawn Care Services</div>
+            </div>
             <div class="datetime">
                 <div class="time" id="time">--:--:--</div>
                 <div class="date" id="date">Loading...</div>
@@ -845,17 +843,25 @@
                 // 4. Add all converted URLs to the array below
                 
                 carouselImages = [
-                    'https://drive.google.com/uc?export=view&id=19bbo-iVzHvoJ_l_ELFQT__N80De5JW8L'
+                    // REPLACE THESE SAMPLE IMAGES WITH YOUR GOOGLE DRIVE IMAGE URLS
+                    // Example format:
+                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_1',
+                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_2',
+                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_3',
+                    
+                    // Sample lawn care images (remove these when you add your own):
+                    'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=800&q=80',
+                    'https://images.unsplash.com/photo-1592479367552-fdc156ce4d03?w=800&q=80',
+                    'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+                    'https://images.unsplash.com/photo-1587502537147-2ba64a117a8c?w=800&q=80',
+                    'https://images.unsplash.com/photo-1595855759920-86582396756e?w=800&q=80'
                 ];
                 
                 const container = document.getElementById('carouselContainer');
                 const indicators = document.getElementById('carouselIndicators');
                 
-                // Build carousel HTML
-                let slidesHTML = '<div class="carousel-controls">';
-                slidesHTML += '<button class="carousel-btn" onclick="previousSlide()">◀</button>';
-                slidesHTML += '<button class="carousel-btn" onclick="nextSlide()">▶</button>';
-                slidesHTML += '</div>';
+                // Build carousel HTML (no manual controls for display screen)
+                let slidesHTML = '';
                 
                 carouselImages.forEach((url, index) => {
                     slidesHTML += `
