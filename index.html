@@ -751,7 +751,25 @@
         }
 
         // Team Photos from Google Drive
-        async function loadTeamPhotos() {
+        async function async function loadTeamPhotos() {
+    try {
+        // Team member photos from Google Drive
+        const teamPhotos = [
+            'https://drive.google.com/uc?export=view&id=19bbo-iVzHvoJ_l_ELFQT__N80De5JW8L'
+        ];
+        
+        let html = '';
+        teamPhotos.forEach(photoUrl => {
+            html += `<img src="${photoUrl}" class="team-photo" alt="Team Member" onerror="this.style.display='none'" />`;
+        });
+        
+        document.getElementById('teamPhotos').innerHTML = html || '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
+        
+    } catch (error) {
+        console.error('Team photos error:', error);
+        document.getElementById('teamPhotos').innerHTML = '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
+    }
+} {
             try {
                 // For publicly shared Google Drive folders, we need to use the folder's shared link
                 // Note: This requires the folder to be set to "Anyone with the link can view"
