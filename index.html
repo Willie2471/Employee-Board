@@ -304,31 +304,104 @@
             grid-column: 1 / -1;
             background: white;
             border-radius: 15px;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
 
-        .team-photos {
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #f5f5f5;
+        }
+
+        .carousel-slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .carousel-indicators {
             display: flex;
-            gap: 15px;
             justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 15px;
         }
 
-        .team-photo {
-            width: 90px;
-            height: 90px;
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #3d6b1f;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .team-photo:hover {
+        .carousel-dot.active {
+            background: #3d6b1f;
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .carousel-btn {
+            background: rgba(61, 107, 31, 0.8);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+            transition: all 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(45, 80, 22, 0.9);
             transform: scale(1.1);
         }
 
@@ -439,14 +512,15 @@
 
         <div class="footer">
             <div style="font-weight: bold; color: #2d5016; margin-bottom: 10px; font-size: 1.2em;">
-                🏆 Our Amazing Team
+                📸 Team Showcase
             </div>
-            <div class="team-photos" id="teamPhotos">
+            <div class="carousel-container" id="carouselContainer">
                 <div class="loading">
                     <div class="loading-spinner"></div>
-                    <div>Loading team photos...</div>
+                    <div>Loading images...</div>
                 </div>
             </div>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
         </div>
     </div>
 
@@ -750,66 +824,117 @@
             }
         }
 
-        // Team Photos from Google Drive
-        async function async function loadTeamPhotos() {
-    try {
-        // Team member photos from Google Drive
-        const teamPhotos = [
-            'https://drive.google.com/uc?export=view&id=19bbo-iVzHvoJ_l_ELFQT__N80De5JW8L'
-        ];
-        
-        let html = '';
-        teamPhotos.forEach(photoUrl => {
-            html += `<img src="${photoUrl}" class="team-photo" alt="Team Member" onerror="this.style.display='none'" />`;
-        });
-        
-        document.getElementById('teamPhotos').innerHTML = html || '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
-        
-    } catch (error) {
-        console.error('Team photos error:', error);
-        document.getElementById('teamPhotos').innerHTML = '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
-    }
-} {
+        // Image Carousel from Google Drive
+        let currentSlide = 0;
+        let carouselImages = [];
+        let carouselInterval = null;
+
+        async function loadCarousel() {
             try {
-                // For publicly shared Google Drive folders, we need to use the folder's shared link
-                // Note: This requires the folder to be set to "Anyone with the link can view"
+                // INSTRUCTIONS TO ADD YOUR GOOGLE DRIVE IMAGES:
+                // 
+                // 1. Open your Team Photos folder: https://drive.google.com/drive/folders/1SPQ9DwEa7qwxkK6CrOOGcjFM7d1Er-KE
+                // 2. For EACH image file:
+                //    - Right-click → "Get link" or "Share"
+                //    - Set to "Anyone with the link can view"
+                //    - Copy the link
+                // 3. Convert each link from this format:
+                //    https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing
+                //    To this format:
+                //    https://drive.google.com/uc?export=view&id=FILE_ID_HERE
+                // 4. Add all converted URLs to the array below
                 
-                // Common team member names as placeholders with initials
-                const teamMembers = [
-                    'WS', 'JD', 'MA', 'RB', 'TC', 'KL', 'DM', 'SJ'
+                carouselImages = [
+                    // REPLACE THESE SAMPLE IMAGES WITH YOUR GOOGLE DRIVE IMAGE URLS
+                    // Example format:
+                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_1',
+                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_2',
+                    // 'https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_3',
+                    
+                    // Sample lawn care images (remove these when you add your own):
+                    'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=800&q=80',
+                    'https://images.unsplash.com/photo-1592479367552-fdc156ce4d03?w=800&q=80',
+                    'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+                    'https://images.unsplash.com/photo-1587502537147-2ba64a117a8c?w=800&q=80',
+                    'https://images.unsplash.com/photo-1595855759920-86582396756e?w=800&q=80'
                 ];
                 
-                let html = '';
+                const container = document.getElementById('carouselContainer');
+                const indicators = document.getElementById('carouselIndicators');
                 
-                // Generate placeholder avatars with initials
-                teamMembers.forEach(initials => {
-                    const colors = ['#2d5016', '#3d6b1f', '#4a7c24', '#578d2a', '#649e30'];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    
-                    html += `
-                        <div class="team-photo" style="
-                            background: ${color};
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: white;
-                            font-weight: bold;
-                            font-size: 1.8em;
-                        ">${initials}</div>
+                // Build carousel HTML
+                let slidesHTML = '<div class="carousel-controls">';
+                slidesHTML += '<button class="carousel-btn" onclick="previousSlide()">◀</button>';
+                slidesHTML += '<button class="carousel-btn" onclick="nextSlide()">▶</button>';
+                slidesHTML += '</div>';
+                
+                carouselImages.forEach((url, index) => {
+                    slidesHTML += `
+                        <div class="carousel-slide ${index === 0 ? 'active' : ''}" id="slide-${index}">
+                            <img src="${url}" alt="Team Image ${index + 1}" onerror="this.parentElement.style.display='none'">
+                        </div>
                     `;
                 });
                 
-                document.getElementById('teamPhotos').innerHTML = html;
+                container.innerHTML = slidesHTML;
                 
-                // Note: To display actual photos from Google Drive, you'll need to:
-                // 1. Make each photo publicly accessible
-                // 2. Get the direct image links
-                // 3. Replace the placeholders above with <img> tags using those links
+                // Build indicators
+                let indicatorsHTML = '';
+                carouselImages.forEach((_, index) => {
+                    indicatorsHTML += `<div class="carousel-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`;
+                });
+                indicators.innerHTML = indicatorsHTML;
+                
+                // Start auto-rotation (every 5 seconds)
+                startCarousel();
                 
             } catch (error) {
-                console.error('Team photos error:', error);
-                document.getElementById('teamPhotos').innerHTML = '<div class="loading">⚠️ Team photos temporarily unavailable</div>';
+                console.error('Carousel error:', error);
+                document.getElementById('carouselContainer').innerHTML = '<div class="loading">⚠️ Images temporarily unavailable</div>';
             }
+        }
+
+        function showSlide(index) {
+            // Wrap around
+            if (index >= carouselImages.length) currentSlide = 0;
+            else if (index < 0) currentSlide = carouselImages.length - 1;
+            else currentSlide = index;
+            
+            // Update slides
+            document.querySelectorAll('.carousel-slide').forEach((slide, i) => {
+                slide.classList.toggle('active', i === currentSlide);
+            });
+            
+            // Update indicators
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+            resetCarouselTimer();
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+            resetCarouselTimer();
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            resetCarouselTimer();
+        }
+
+        function startCarousel() {
+            if (carouselInterval) clearInterval(carouselInterval);
+            carouselInterval = setInterval(() => {
+                nextSlide();
+            }, 5000); // Change slide every 5 seconds
+        }
+
+        function resetCarouselTimer() {
+            startCarousel(); // Restart the timer when user manually changes slides
         }
 
         // Initialize everything
@@ -834,7 +959,7 @@
             }, msUntilMidnight);
             
             loadNews();
-            loadTeamPhotos();
+            loadCarousel();
         }
 
         // Start when page loads
