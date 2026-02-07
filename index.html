@@ -83,8 +83,8 @@
         /* Auto-scroll animation */
         @keyframes smoothScroll {
             0% { transform: translateY(0); }
-            45% { transform: translateY(-40%); }
-            50% { transform: translateY(-40%); }
+            45% { transform: translateY(calc(-100% + 100vh - 120px)); }
+            50% { transform: translateY(calc(-100% + 100vh - 120px)); }
             95% { transform: translateY(0); }
             100% { transform: translateY(0); }
         }
@@ -104,6 +104,7 @@
             gap: 20px;
             padding: 20px;
             min-height: fit-content;
+            padding-bottom: 40px;
         }
 
         .main-content {
