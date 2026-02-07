@@ -83,11 +83,14 @@
         /* Auto-scroll animation */
         @keyframes smoothScroll {
             0% { transform: translateY(0); }
-            100% { transform: translateY(calc(-100% + 100vh - 150px)); }
+            45% { transform: translateY(-40%); }
+            50% { transform: translateY(-40%); }
+            95% { transform: translateY(0); }
+            100% { transform: translateY(0); }
         }
 
         .auto-scroll-wrapper {
-            animation: smoothScroll 70s linear infinite;
+            animation: smoothScroll 120s ease-in-out infinite;
             animation-play-state: running;
         }
 
@@ -280,12 +283,16 @@
         }
 
         .news-scroll-wrapper {
-            animation: newsScroll 60s linear infinite;
+            animation: newsScroll 60s ease-in-out infinite;
         }
 
         @keyframes newsScroll {
             0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
+            5% { transform: translateY(0); }
+            45% { transform: translateY(-50%); }
+            50% { transform: translateY(-50%); }
+            95% { transform: translateY(0); }
+            100% { transform: translateY(0); }
         }
 
         .news-scroll-wrapper:hover {
