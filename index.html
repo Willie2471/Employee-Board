@@ -15,31 +15,26 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f4f8;
             color: #333;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-rows: auto auto;
-            gap: 20px;
-            padding: 20px;
-            min-height: 100vh;
-            height: auto;
-        }
-
+        /* Fixed Header */
         .header {
-            grid-column: 1 / -1;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: white;
             color: #2d5016;
             padding: 20px 30px;
-            border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 2px solid #e0e0e0;
+            border-bottom: 3px solid #3d6b1f;
+            flex-shrink: 0;
         }
 
         .company-branding {
@@ -49,7 +44,7 @@
         }
 
         .company-logo {
-            height: 70px;  /* Adjusted from 80px - let me know if you want bigger/smaller */
+            height: 70px;
             width: auto;
         }
 
@@ -57,7 +52,6 @@
             font-size: 2.2em;
             font-weight: bold;
             color: #2d5016;
-            text-shadow: none;
         }
 
         .datetime {
@@ -78,6 +72,37 @@
             color: #2d5016;
         }
 
+        /* Scrollable Content Container */
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Auto-scroll animation */
+        @keyframes smoothScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(calc(-100% + 100vh - 150px)); }
+        }
+
+        .auto-scroll-wrapper {
+            animation: smoothScroll 120s linear infinite;
+            animation-play-state: running;
+        }
+
+        .auto-scroll-wrapper:hover {
+            animation-play-state: paused;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            min-height: fit-content;
+        }
+
         .main-content {
             display: flex;
             flex-direction: column;
@@ -88,7 +113,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            height: fit-content;
         }
 
         .card {
@@ -107,6 +131,7 @@
             padding-bottom: 10px;
         }
 
+        /* Weather Card */
         .weather-card {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             color: #1565c0;
@@ -178,16 +203,14 @@
             50% { opacity: 0.7; }
         }
 
+        /* Announcements Card */
         .announcements-card {
             flex: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
         .announcements-list {
+            max-height: 500px;
             overflow-y: auto;
-            flex: 1;
         }
 
         .announcement-item {
@@ -245,29 +268,95 @@
             font-size: 1.05em;
         }
 
+        /* News Card with Auto-Scroll */
         .news-card {
-            height: 300px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            min-height: 500px;
         }
 
-        .radar-card {
-            height: auto;
-            min-height: 450px;
-            overflow: visible;
+        .news-list {
+            max-height: 450px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .news-scroll-wrapper {
+            animation: newsScroll 60s linear infinite;
+        }
+
+        @keyframes newsScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .news-scroll-wrapper:hover {
+            animation-play-state: paused;
+        }
+
+        .news-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #3d6b1f;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .news-item:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .news-title {
+            font-weight: bold;
+            color: #2d5016;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+            line-height: 1.4;
+        }
+
+        .news-source {
+            font-size: 0.85em;
+            color: #666;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            background: #3d6b1f;
+            color: white;
+            margin-left: 8px;
+        }
+
+        .news-summary {
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.5;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(45, 80, 22, 0.2);
+            font-style: italic;
+        }
+
+        /* Radar Card */
+        .radar-card {
+            min-height: 450px;
         }
 
         .radar-container {
-            flex: 1;
             position: relative;
             border-radius: 10px;
             overflow: hidden;
             background: #f5f5f5;
-            min-height: 400px;
-            height: 100%;
+            height: 400px;
         }
 
         .radar-container iframe {
@@ -280,38 +369,7 @@
             border-radius: 10px;
         }
 
-        .news-list {
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .news-item {
-            padding: 12px;
-            margin-bottom: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .news-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .news-title {
-            font-weight: bold;
-            color: #2d5016;
-            margin-bottom: 5px;
-            font-size: 0.95em;
-            line-height: 1.3;
-        }
-
-        .news-source {
-            font-size: 0.8em;
-            color: #666;
-        }
-
+        /* Inspiration Card */
         .inspiration-card {
             background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
             color: #5d4e37;
@@ -354,12 +412,9 @@
             border: 2px solid rgba(93,78,55,0.4);
         }
 
+        /* Showcase Card */
         .showcase-card {
-            height: auto;
             min-height: 350px;
-            overflow: visible;
-            display: flex;
-            flex-direction: column;
         }
 
         .showcase-card .card-title {
@@ -373,9 +428,7 @@
         .showcase-card .video-container {
             position: relative;
             width: 100%;
-            max-width: 100%;
-            margin: 0;
-            padding-bottom: 56.25%; /* Standard 16:9 ratio for better visibility */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             border-radius: 10px;
@@ -435,6 +488,21 @@
             100% { transform: rotate(360deg); }
         }
 
+        .importance-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .importance-today {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -453,23 +521,35 @@
             background: #2d5016;
         }
 
-        .importance-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.75em;
-            font-weight: bold;
-            margin-left: 8px;
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .content-grid {
+                grid-template-columns: 1.5fr 1fr;
+            }
         }
 
-        .importance-today {
-            background: #ff6b6b;
-            color: white;
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .company-name {
+                font-size: 1.8em;
+            }
+            
+            .time {
+                font-size: 2.2em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Fixed Header -->
         <div class="header">
             <div class="company-branding">
                 <img src="Wordpress Transparent.png" alt="WS Lawn Care Services" class="company-logo">
@@ -481,70 +561,78 @@
             </div>
         </div>
 
-        <div class="main-content">
-            <div class="card weather-card">
-                <div class="card-title">🌤️ Titusville Weather</div>
-                <div id="weatherContent" class="loading">
-                    <div class="loading-spinner"></div>
-                    <div>Loading weather...</div>
-                </div>
-            </div>
+        <!-- Scrollable Content -->
+        <div class="scrollable-content">
+            <div class="auto-scroll-wrapper">
+                <div class="content-grid">
+                    <div class="main-content">
+                        <div class="card weather-card">
+                            <div class="card-title">🌤️ Titusville Weather</div>
+                            <div id="weatherContent" class="loading">
+                                <div class="loading-spinner"></div>
+                                <div>Loading weather...</div>
+                            </div>
+                        </div>
 
-            <div class="card announcements-card">
-                <div class="card-title">📢 Important Announcements</div>
-                <div id="announcementsContent" class="announcements-list">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <div>Loading announcements...</div>
+                        <div class="card announcements-card">
+                            <div class="card-title">📢 Important Announcements</div>
+                            <div id="announcementsContent" class="announcements-list">
+                                <div class="loading">
+                                    <div class="loading-spinner"></div>
+                                    <div>Loading announcements...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar">
+                        <div class="card inspiration-card">
+                            <div class="card-title">✝️ Daily Inspiration</div>
+                            <div id="inspirationContent">
+                                <div class="word-of-day" id="wordOfDay">FAITH</div>
+                                <div class="verse" id="verse">Loading verse...</div>
+                                <div class="verse-reference" id="verseRef"></div>
+                            </div>
+                        </div>
+
+                        <div class="card news-card">
+                            <div class="card-title">🌿 Industry News & Articles</div>
+                            <div id="newsContent" class="news-list">
+                                <div class="loading">
+                                    <div class="loading-spinner"></div>
+                                    <div>Loading news...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card radar-card">
+                            <div class="card-title">🌧️ Rain Radar</div>
+                            <div class="radar-container" id="radarContainer">
+                                <div class="loading">
+                                    <div class="loading-spinner"></div>
+                                    <div>Loading radar...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card showcase-card">
+                            <div class="card-title">
+                                🏆 Completed Jobs
+                                <button class="audio-toggle-small muted" id="audioToggle" onclick="toggleAudio()">
+                                    <span id="audioIcon">🔇</span>
+                                </button>
+                            </div>
+                            <div class="video-container" id="videoContainer">
+                                <div class="loading">
+                                    <div class="loading-spinner"></div>
+                                    <div>Loading...</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="sidebar">
-            <div class="card inspiration-card">
-                <div class="card-title">✝️ Daily Inspiration</div>
-                <div id="inspirationContent">
-                    <div class="word-of-day" id="wordOfDay">FAITH</div>
-                    <div class="verse" id="verse">Loading verse...</div>
-                    <div class="verse-reference" id="verseRef"></div>
-                </div>
-            </div>
-
-            <div class="card news-card">
-                <div class="card-title">🌿 Industry News</div>
-                <div id="newsContent" class="news-list">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <div>Loading news...</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card radar-card">
-                <div class="card-title">🌧️ Rain Radar</div>
-                <div class="radar-container" id="radarContainer">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <div>Loading radar...</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card showcase-card">
-                <div class="card-title">
-                    🏆 Completed Jobs
-                    <button class="audio-toggle-small muted" id="audioToggle" onclick="toggleAudio()">
-                        <span id="audioIcon">🔇</span>
-                    </button>
-                </div>
-                <div class="video-container" id="videoContainer">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <div>Loading...</div>
-                    </div>
-                </div>
-            </div>
     </div>
 
     <script>
@@ -666,15 +754,13 @@
                 
                 const response = await fetch(url);
                 const text = await response.text();
-                const rows = text.split('\n').slice(1); // Skip header
+                const rows = text.split('\n').slice(1);
                 
-                const today = new Date().toLocaleDateString('en-US');
                 let html = '';
                 let hasAnnouncements = false;
                 
                 rows.forEach(row => {
                     if (row.trim()) {
-                        // Parse CSV properly handling commas in quotes
                         const cols = parseCSVRow(row);
                         
                         if (cols.length >= 3) {
@@ -685,7 +771,6 @@
                             const importance = cols[4]?.trim();
                             const status = cols[5]?.trim();
                             
-                            // Only show "New" status announcements
                             if (message && status === 'New') {
                                 hasAnnouncements = true;
                                 
@@ -723,7 +808,6 @@
             }
         }
 
-        // Helper function to parse CSV rows properly
         function parseCSVRow(row) {
             const cols = [];
             let current = '';
@@ -776,69 +860,89 @@
             document.getElementById('wordOfDay').textContent = word;
         }
 
-        // News (Lawn & Landscape Industry)
+        // Industry News with Auto-Scroll
         async function loadNews() {
             try {
                 const newsItems = [
                     { 
                         title: 'Spring Lawn Preparation: Essential Steps for a Healthy Start', 
                         source: 'Turf Magazine',
-                        category: 'seasonal'
+                        category: 'Seasonal',
+                        summary: 'Expert tips on preparing lawns for spring growth, including soil testing, fertilization schedules, and early pest prevention strategies.'
                     },
                     { 
                         title: 'New Mowing Equipment Technology Increases Efficiency by 30%', 
                         source: 'Lawn & Landscape',
-                        category: 'equipment'
+                        category: 'Equipment',
+                        summary: 'Latest innovations in commercial mowing equipment featuring GPS tracking, automated blade sharpening, and fuel efficiency improvements.'
                     },
                     { 
                         title: 'Sustainable Landscaping Practices Gain Momentum in 2026', 
                         source: 'Green Industry Pros',
-                        category: 'trends'
+                        category: 'Trends',
+                        summary: 'How eco-friendly practices are becoming the new standard, including organic fertilizers, water conservation, and native plant integration.'
                     },
                     { 
                         title: 'OSHA Updates: Heat Safety Guidelines for Outdoor Workers', 
                         source: 'Safety & Compliance',
-                        category: 'safety'
+                        category: 'Safety',
+                        summary: 'New federal guidelines require mandatory water breaks, shade access, and heat illness prevention training for all outdoor workers.'
                     },
                     { 
                         title: 'Florida Lawn Care: Managing St. Augustine Grass in Winter', 
                         source: 'Local Horticulture',
-                        category: 'regional'
+                        category: 'Regional',
+                        summary: 'Best practices for maintaining St. Augustine grass during Florida\'s mild winters, including proper mowing heights and irrigation adjustments.'
                     },
                     { 
                         title: 'Best Practices for Irrigation System Maintenance', 
                         source: 'Irrigation & Green Industry',
-                        category: 'maintenance'
+                        category: 'Maintenance',
+                        summary: 'Comprehensive guide to seasonal irrigation system checks, leak detection, and water usage optimization to reduce costs.'
                     },
                     { 
                         title: 'Employee Retention Strategies for Landscape Companies', 
                         source: 'Landscape Management',
-                        category: 'business'
+                        category: 'Business',
+                        summary: 'Proven methods to attract and retain quality employees including competitive benefits, clear career paths, and positive work culture.'
                     },
                     { 
                         title: 'Dealing with Common Florida Lawn Pests and Diseases', 
                         source: 'Turf Care Digest',
-                        category: 'regional'
+                        category: 'Regional',
+                        summary: 'Identification and treatment strategies for chinch bugs, brown patch fungus, and other common Florida lawn problems.'
+                    },
+                    { 
+                        title: 'Customer Communication: The Key to Service Business Growth', 
+                        source: 'Service Business Journal',
+                        category: 'Business',
+                        summary: 'How implementing regular client updates, photo documentation, and proactive communication builds loyalty and referrals.'
+                    },
+                    { 
+                        title: 'Electric vs Gas Equipment: A Cost-Benefit Analysis for 2026', 
+                        source: 'Equipment Today',
+                        category: 'Equipment',
+                        summary: 'Detailed comparison of electric and gas-powered equipment considering purchase price, maintenance costs, and environmental impact.'
                     }
                 ];
                 
-                // Rotate news items daily
-                const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-                const startIndex = dayOfYear % newsItems.length;
-                const displayItems = [
-                    ...newsItems.slice(startIndex),
-                    ...newsItems.slice(0, startIndex)
-                ].slice(0, 5);
+                // Duplicate items for seamless loop
+                const doubledItems = [...newsItems, ...newsItems];
                 
-                let html = '';
-                displayItems.forEach(item => {
+                let html = '<div class="news-scroll-wrapper">';
+                doubledItems.forEach(item => {
                     html += `
                         <div class="news-item">
                             <div class="news-title">${item.title}</div>
-                            <div class="news-source">📰 ${item.source}</div>
+                            <div class="news-source">
+                                📰 ${item.source}
+                                <span class="news-category">${item.category}</span>
+                            </div>
+                            <div class="news-summary">${item.summary}</div>
                         </div>
                     `;
                 });
+                html += '</div>';
                 
                 document.getElementById('newsContent').innerHTML = html;
             } catch (error) {
@@ -850,7 +954,6 @@
         // Rain Radar
         function loadRadar() {
             const radarContainer = document.getElementById('radarContainer');
-            // Using Windy.com embed for Titusville, FL area
             radarContainer.innerHTML = `
                 <iframe
                     src="https://embed.windy.com/embed2.html?lat=28.612&lon=-80.808&detailLat=28.612&detailLon=-80.808&width=650&height=450&zoom=8&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1"
@@ -861,51 +964,32 @@
         }
 
         // YouTube Video Player
-        let isMuted = true; // Start muted by default
+        let isMuted = true;
         
         function loadVideo() {
-            // OPTION 1: Use a single video ID
-            const youtubeVideoId = '1UUIXmNi2V0'; // Your current video
+            const youtubePlaylistId = 'PL0nEPsI_BclcUE7kEUZREeTAAXF0Uubff';
+            const embedUrl = `https://www.youtube.com/embed/videoseries?list=${youtubePlaylistId}&autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
             
-            // OPTION 2: Use a playlist ID (RECOMMENDED for easy updates)
-            const youtubePlaylistId = 'PL0nEPsI_BclcUE7kEUZREeTAAXF0Uubff'; // WS Lawn Care Completed Jobs Playlist
-            const usePlaylist = true; // Set to true to use playlist
-            
-            let embedUrl = '';
-            
-            if (usePlaylist && youtubePlaylistId) {
-                // Playlist mode - plays all videos in sequence
-                embedUrl = `https://www.youtube.com/embed/videoseries?list=${youtubePlaylistId}&autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
-            } else if (youtubeVideoId) {
-                // Single video mode
-                embedUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
-            }
-            
-            if (embedUrl) {
-                const videoContainer = document.getElementById('videoContainer');
-                videoContainer.innerHTML = `
-                    <iframe 
-                        id="youtubePlayer"
-                        src="${embedUrl}"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen>
-                    </iframe>
-                `;
-            }
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = `
+                <iframe 
+                    id="youtubePlayer"
+                    src="${embedUrl}"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen>
+                </iframe>
+            `;
         }
 
         function toggleAudio() {
             isMuted = !isMuted;
             const button = document.getElementById('audioToggle');
             const icon = document.getElementById('audioIcon');
-            const text = document.getElementById('audioText');
             const iframe = document.getElementById('youtubePlayer');
             
             if (isMuted) {
                 button.classList.add('muted');
                 icon.textContent = '🔇';
-                text.textContent = 'Audio Off';
-                // Reload iframe with mute=1
                 if (iframe) {
                     const src = iframe.src.replace('mute=0', 'mute=1');
                     iframe.src = src;
@@ -913,8 +997,6 @@
             } else {
                 button.classList.remove('muted');
                 icon.textContent = '🔊';
-                text.textContent = 'Audio On';
-                // Reload iframe with mute=0
                 if (iframe) {
                     const src = iframe.src.replace('mute=1', 'mute=0');
                     iframe.src = src;
@@ -922,25 +1004,24 @@
             }
         }
 
-        // Initialize everything
+        // Initialize
         function init() {
             updateDateTime();
             setInterval(updateDateTime, 1000);
             
             loadWeather();
-            setInterval(loadWeather, 300000); // Update every 5 minutes
+            setInterval(loadWeather, 300000);
             
             loadAnnouncements();
-            setInterval(loadAnnouncements, 600000); // Update every 10 minutes
+            setInterval(loadAnnouncements, 600000);
             
             loadInspiration();
-            // Update inspiration at midnight
             const now = new Date();
             const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
             const msUntilMidnight = tomorrow - now;
             setTimeout(() => {
                 loadInspiration();
-                setInterval(loadInspiration, 86400000); // 24 hours
+                setInterval(loadInspiration, 86400000);
             }, msUntilMidnight);
             
             loadNews();
@@ -948,7 +1029,6 @@
             loadVideo();
         }
 
-        // Start when page loads
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
